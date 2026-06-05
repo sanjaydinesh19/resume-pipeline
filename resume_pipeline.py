@@ -13,6 +13,7 @@ Usage:
 """
 
 import sys
+import re
 import shutil
 from pathlib import Path
 import typer
@@ -38,6 +39,17 @@ class Stage(str, Enum):
     analyse = "analyse"
     rewrite = "rewrite"
     interview = "interview"
+
+
+def _next_output_name(output_dir: str) -> str:
+    out = Path(output_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    nums = [
+        int(m.group(1))
+        for f in out.glob("Resume *.tex")
+        if (m := re.match(r"Resume (\d+)", f.stem))
+    ]
+    return f"Resume {max(nums, default=0) + 1}"
 
 
 def _get_resume_path(resume: Optional[str]) -> str:
@@ -124,7 +136,8 @@ def main(
             job_desc = _get_job_description(job)
 
         missing_kws = get_missing_keywords_string(analysis_result) if analysis_result else ""
-        run_rewriter(resume_text, job_desc, missing_kws, output_dir=output)
+        output_name = _next_output_name(output)
+        run_rewriter(resume_text, job_desc, missing_kws, output_dir=output, output_name=output_name)
 
         if stage == Stage.all:
             if not ask_continue("Proceed to Stage 4 — Mock Interview with Hiring Manager?"):

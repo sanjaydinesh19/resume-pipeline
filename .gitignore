@@ -40,3 +40,6 @@ Thumbs.db
 # Resume files (keep your own resume private)
 *.pdf
 !assets/
+
+# Generated outputs
+outputs/

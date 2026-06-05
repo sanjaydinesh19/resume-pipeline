@@ -127,16 +127,13 @@ Your task:
 4. Tailor content to the job description provided
 5. Output complete, compilable LaTeX code
 
-LaTeX Template Requirements:
-- Packages: geometry, titlesec, enumitem, hyperref, changepage, needspace, fontenc, inputenc
-- Ruled section headers using titlesec
-- Ragged-right alignment
-- Two-column entry environment for job/project headers
-- Highlighted bullet points using itemize with custom labels
-- Sections: Education, Experience, Projects, Achievements, Technical Skills, Certifications
-- Compact but readable: 11pt font, margins 0.5in top/bottom, 0.6in left/right
-- Name in large bold, contact info in smaller text below
-- Hyperref for clickable links
+CRITICAL STYLE REQUIREMENT: You will be given the candidate's existing LaTeX template.
+Preserve it EXACTLY — same \\documentclass, same packages, same custom commands
+(\\resumeEntry, \\resumeSubEntry, \\resumeItemListStart, \\resumeItemListEnd, \\resumeItem,
+\\resumeEntryListStart, \\resumeEntryListEnd), same margins, same font size, same section order.
+Only change the content inside the commands, never the commands or preamble themselves.
+Keep only the sections that exist in the original resume — do not add Achievements or
+Certifications if they are not present.
 
 Return ONLY valid JSON — no preamble, no markdown fences.
 
@@ -154,7 +151,7 @@ Return ONLY valid JSON — no preamble, no markdown fences.
   "keywords_inserted": ["<kw1>", "<kw2>", ...]
 }"""
 
-REWRITER_USER = """Original resume:
+REWRITER_USER = """Original resume content:
 
 {resume_text}
 
@@ -164,7 +161,10 @@ Target job description:
 Missing keywords to incorporate (from Stage 2 analysis):
 {missing_keywords}
 
-Rewrite the complete resume using Google XYZ formula and return full LaTeX code."""
+LaTeX template to preserve (use this exact structure, packages, and custom commands):
+{latex_template}
+
+Rewrite the resume using Google XYZ formula. Output the full LaTeX code using the exact same template style."""
 
 
 # ─── Stage 4: Hiring Manager ─────────────────────────────────────────────────

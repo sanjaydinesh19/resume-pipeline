@@ -15,10 +15,14 @@ def run_rewriter(
     resume_text: str,
     job_description: str,
     missing_keywords: str = "",
-    output_dir: str = "."
+    output_dir: str = ".",
+    output_name: str = "resume_rewritten"
 ) -> dict:
     """Rewrite resume with XYZ formula. Saves LaTeX file. Returns result dict."""
     stage_header("rewrite")
+
+    template_path = Path(__file__).parent.parent / "assets" / "latex_template.tex"
+    latex_template = template_path.read_text(encoding="utf-8") if template_path.exists() else ""
 
     with spinner("Rewriting resume with Google XYZ formula + LaTeX..."):
         raw = ask_claude(
@@ -26,7 +30,8 @@ def run_rewriter(
             REWRITER_USER.format(
                 resume_text=resume_text,
                 job_description=job_description,
-                missing_keywords=missing_keywords or "None provided"
+                missing_keywords=missing_keywords or "None provided",
+                latex_template=latex_template
             )
         )
     if raw.startswith("```"):
@@ -39,15 +44,14 @@ def run_rewriter(
         result = json.loads(raw)
     except json.JSONDecodeError:
         console.print(f"[red]Failed to parse Rewriter response.[/red]")
-        # Try to salvage LaTeX if JSON failed
         _save_raw_latex(raw, output_dir)
         return {}
 
-    _display_rewrite(result, output_dir)
+    _display_rewrite(result, output_dir, output_name)
     return result
 
 
-def _display_rewrite(result: dict, output_dir: str):
+def _display_rewrite(result: dict, output_dir: str, output_name: str = "resume_rewritten"):
     # Bullet rewrites
     bullets = result.get("rewritten_bullets", [])
     if bullets:
@@ -81,7 +85,7 @@ def _display_rewrite(result: dict, output_dir: str):
     # Save LaTeX
     latex_code = result.get("latex_code", "")
     if latex_code:
-        output_path = _save_latex(latex_code, output_dir)
+        output_path = _save_latex(latex_code, output_dir, output_name)
         console.print()
         console.print(Panel(
             f"[bold green]LaTeX resume saved to:[/bold green]\n[cyan]{output_path}[/cyan]\n\n"
@@ -101,8 +105,8 @@ def _display_rewrite(result: dict, output_dir: str):
     success("Rewrite complete. LaTeX file ready to compile.")
 
 
-def _save_latex(latex_code: str, output_dir: str) -> str:
-    out = Path(output_dir) / "resume_rewritten.tex"
+def _save_latex(latex_code: str, output_dir: str, output_name: str = "resume_rewritten") -> str:
+    out = Path(output_dir) / f"{output_name}.tex"
     out.write_text(latex_code, encoding="utf-8")
     return str(out)
 
