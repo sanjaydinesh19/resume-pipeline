@@ -1,7 +1,7 @@
 """Stage 3 — Resume Rewriter: Google XYZ formula + LaTeX output."""
 import json
 from pathlib import Path
-import anthropic
+from .claude_client import ask_claude
 from .prompts import REWRITER_SYSTEM, REWRITER_USER
 from .ui import (
     console, stage_header, section_title, divider,
@@ -20,24 +20,15 @@ def run_rewriter(
     """Rewrite resume with XYZ formula. Saves LaTeX file. Returns result dict."""
     stage_header("rewrite")
 
-    client = anthropic.Anthropic()
-
     with spinner("Rewriting resume with Google XYZ formula + LaTeX..."):
-        response = client.messages.create(
-            model="claude-opus-4-5",
-            max_tokens=8192,
-            system=REWRITER_SYSTEM,
-            messages=[{
-                "role": "user",
-                "content": REWRITER_USER.format(
-                    resume_text=resume_text,
-                    job_description=job_description,
-                    missing_keywords=missing_keywords or "None provided"
-                )
-            }]
+        raw = ask_claude(
+            REWRITER_SYSTEM,
+            REWRITER_USER.format(
+                resume_text=resume_text,
+                job_description=job_description,
+                missing_keywords=missing_keywords or "None provided"
+            )
         )
-
-    raw = response.content[0].text.strip()
     if raw.startswith("```"):
         raw = raw.split("```")[1]
         if raw.startswith("json"):

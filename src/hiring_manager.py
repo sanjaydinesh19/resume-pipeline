@@ -1,6 +1,6 @@
 """Stage 4 — Hiring Manager: Mock interview with scoring and ATS assessment."""
 import json
-import anthropic
+from .claude_client import ask_claude
 from .prompts import (
     INTERVIEW_SYSTEM,
     INTERVIEW_QUESTIONS_PROMPT,
@@ -21,24 +21,15 @@ def run_interview(resume_text: str, job_description: str = "General Tech Role") 
     """Run interactive mock interview. Returns final assessment dict."""
     stage_header("interview")
 
-    client = anthropic.Anthropic()
-
     # Generate questions
     with spinner("Generating your 10 hardest interview questions..."):
-        q_response = client.messages.create(
-            model="claude-opus-4-5",
-            max_tokens=3000,
-            system=INTERVIEW_SYSTEM,
-            messages=[{
-                "role": "user",
-                "content": INTERVIEW_QUESTIONS_PROMPT.format(
-                    resume_text=resume_text,
-                    job_description=job_description
-                )
-            }]
+        raw = ask_claude(
+            INTERVIEW_SYSTEM,
+            INTERVIEW_QUESTIONS_PROMPT.format(
+                resume_text=resume_text,
+                job_description=job_description
+            )
         )
-
-    raw = q_response.content[0].text.strip()
     if raw.startswith("```"):
         raw = raw.split("```")[1]
         if raw.startswith("json"):
@@ -101,21 +92,14 @@ def run_interview(resume_text: str, job_description: str = "General Tech Role") 
 
         # Evaluate answer
         with spinner("Evaluating your answer..."):
-            eval_response = client.messages.create(
-                model="claude-opus-4-5",
-                max_tokens=800,
-                system=INTERVIEW_SYSTEM,
-                messages=[{
-                    "role": "user",
-                    "content": INTERVIEW_EVAL_PROMPT.format(
-                        question=q.get("question", ""),
-                        what_looking_for=q.get("what_im_looking_for", ""),
-                        answer=answer
-                    )
-                }]
+            eval_raw = ask_claude(
+                INTERVIEW_SYSTEM,
+                INTERVIEW_EVAL_PROMPT.format(
+                    question=q.get("question", ""),
+                    what_looking_for=q.get("what_im_looking_for", ""),
+                    answer=answer
+                )
             )
-
-        eval_raw = eval_response.content[0].text.strip()
         if eval_raw.startswith("```"):
             eval_raw = eval_raw.split("```")[1]
             if eval_raw.startswith("json"):
@@ -168,21 +152,14 @@ def run_interview(resume_text: str, job_description: str = "General Tech Role") 
     ])
 
     with spinner("Generating final hiring assessment..."):
-        final_response = client.messages.create(
-            model="claude-opus-4-5",
-            max_tokens=1000,
-            system=INTERVIEW_SYSTEM,
-            messages=[{
-                "role": "user",
-                "content": FINAL_ASSESSMENT_PROMPT.format(
-                    resume_text=resume_text,
-                    job_description=job_description,
-                    qa_summary=qa_summary
-                )
-            }]
+        final_raw = ask_claude(
+            INTERVIEW_SYSTEM,
+            FINAL_ASSESSMENT_PROMPT.format(
+                resume_text=resume_text,
+                job_description=job_description,
+                qa_summary=qa_summary
+            )
         )
-
-    final_raw = final_response.content[0].text.strip()
     if final_raw.startswith("```"):
         final_raw = final_raw.split("```")[1]
         if final_raw.startswith("json"):

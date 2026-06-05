@@ -19,9 +19,8 @@ Built for AI / ML / Robotics / SDE job seekers. Runs entirely in your Ubuntu ter
 ## Quick Start
 
 ```bash
-# 1. Setup (run once)
+# 1. Setup (run once — requires Claude Code CLI)
 bash setup.sh
-export ANTHROPIC_API_KEY=your_key_here
 
 # 2. Full pipeline (interactive)
 python resume_pipeline.py

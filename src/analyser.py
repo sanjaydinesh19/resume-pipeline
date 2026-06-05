@@ -1,6 +1,6 @@
 """Stage 2 — Job Description Analyser: Keyword gap analysis vs 1000+ JDs."""
 import json
-import anthropic
+from .claude_client import ask_claude
 from .prompts import ANALYSER_SYSTEM, ANALYSER_USER
 from .ui import (
     console, stage_header, section_title, divider,
@@ -12,23 +12,11 @@ def run_analyser(resume_text: str, job_description: str = "General AI/ML/SDE rol
     """Analyse keyword gaps. Returns structured results dict."""
     stage_header("analyse")
 
-    client = anthropic.Anthropic()
-
     with spinner("Analysing against 1000+ job descriptions..."):
-        response = client.messages.create(
-            model="claude-opus-4-5",
-            max_tokens=4096,
-            system=ANALYSER_SYSTEM,
-            messages=[{
-                "role": "user",
-                "content": ANALYSER_USER.format(
-                    resume_text=resume_text,
-                    job_description=job_description
-                )
-            }]
+        raw = ask_claude(
+            ANALYSER_SYSTEM,
+            ANALYSER_USER.format(resume_text=resume_text, job_description=job_description)
         )
-
-    raw = response.content[0].text.strip()
     if raw.startswith("```"):
         raw = raw.split("```")[1]
         if raw.startswith("json"):

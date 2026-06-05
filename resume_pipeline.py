@@ -13,7 +13,7 @@ Usage:
 """
 
 import sys
-import os
+import shutil
 from pathlib import Path
 import typer
 from typing import Optional
@@ -76,10 +76,10 @@ def main(
 
     banner()
 
-    # ── Check API key ─────────────────────────────────────────────────────────
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        error("ANTHROPIC_API_KEY environment variable not set.")
-        console.print("  Set it with: [bold cyan]export ANTHROPIC_API_KEY=your_key_here[/bold cyan]")
+    # ── Check Claude Code CLI ─────────────────────────────────────────────────
+    if not shutil.which("claude"):
+        error("Claude Code CLI not found.")
+        console.print("  Install it from: [bold cyan]https://claude.ai/code[/bold cyan]")
         raise typer.Exit(1)
 
     # ── Load resume ───────────────────────────────────────────────────────────

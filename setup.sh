@@ -20,7 +20,7 @@ echo "✔ Python found: $(python3 --version)"
 # Install pip deps
 echo ""
 echo "Installing Python dependencies..."
-pip install anthropic rich typer pymupdf --break-system-packages -q
+pip install rich typer pymupdf --break-system-packages -q
 echo "✔ Dependencies installed"
 
 # Check for LaTeX (optional)
@@ -32,14 +32,14 @@ else
   echo "   sudo apt install texlive-latex-recommended texlive-fonts-recommended"
 fi
 
-# API key check
+# Check Claude Code CLI
 echo ""
-if [ -z "$ANTHROPIC_API_KEY" ]; then
-  echo "⚠  ANTHROPIC_API_KEY not set."
-  echo "   Add to your shell: export ANTHROPIC_API_KEY=your_key_here"
-  echo "   Or add to ~/.bashrc for persistence."
+if command -v claude &>/dev/null; then
+  echo "✔ Claude Code CLI found"
 else
-  echo "✔ ANTHROPIC_API_KEY is set"
+  echo "❌ Claude Code CLI not found."
+  echo "   Install it from: https://claude.ai/code"
+  exit 1
 fi
 
 echo ""

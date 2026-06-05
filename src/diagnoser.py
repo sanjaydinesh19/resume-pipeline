@@ -1,6 +1,6 @@
 """Stage 1 — ATS Diagnoser: Scans resume like ATS software and flags issues."""
 import json
-import anthropic
+from .claude_client import ask_claude
 from .prompts import DIAGNOSER_SYSTEM, DIAGNOSER_USER
 from .ui import (
     console, stage_header, section_title, divider,
@@ -12,23 +12,11 @@ def run_diagnoser(resume_text: str, job_description: str = "Not specified") -> d
     """Run ATS diagnosis on resume. Returns structured results dict."""
     stage_header("diagnose")
 
-    client = anthropic.Anthropic()
-
     with spinner("Scanning resume with ATS engine..."):
-        response = client.messages.create(
-            model="claude-opus-4-5",
-            max_tokens=4096,
-            system=DIAGNOSER_SYSTEM,
-            messages=[{
-                "role": "user",
-                "content": DIAGNOSER_USER.format(
-                    resume_text=resume_text,
-                    job_description=job_description
-                )
-            }]
+        raw = ask_claude(
+            DIAGNOSER_SYSTEM,
+            DIAGNOSER_USER.format(resume_text=resume_text, job_description=job_description)
         )
-
-    raw = response.content[0].text.strip()
     # Strip markdown fences if present
     if raw.startswith("```"):
         raw = raw.split("```")[1]
