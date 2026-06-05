@@ -1,4 +1,4 @@
-# Resume Pipeline 🚀
+# Resume Pipeline
 
 **AI-Powered 4-Stage Resume Optimization System**
 Built for AI / ML / Robotics / SDE job seekers. Runs entirely in your Ubuntu terminal.
@@ -9,10 +9,10 @@ Built for AI / ML / Robotics / SDE job seekers. Runs entirely in your Ubuntu ter
 
 | # | Stage | What it does |
 |---|-------|-------------|
-| 1 | 🔍 **Diagnoser** | ATS scan — flags weak sections, passive voice, missing metrics |
-| 2 | 📊 **Analyser** | Keyword gap analysis vs 1000+ JDs in your field |
-| 3 | ✍️ **Rewriter** | Rewrites bullets with Google XYZ formula + outputs LaTeX |
-| 4 | 🎯 **Hiring Manager** | Mock interview — 10 hard questions, per-answer scores, ATS rating |
+| 1 | **Diagnoser** | ATS scan — flags weak sections, passive voice, missing metrics |
+| 2 | **Analyser** | Keyword gap analysis vs 1000+ JDs in your field |
+| 3 | **Rewriter** | Rewrites bullets with Google XYZ formula + outputs LaTeX |
+| 4 | **Hiring Manager** | Mock interview — 10 hard questions, per-answer scores, ATS rating |
 
 ---
 
