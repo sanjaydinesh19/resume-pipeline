@@ -1,0 +1,128 @@
+% Resume LaTeX Template — Sanjay's Custom Format
+% Compile with: pdflatex resume.tex
+
+\documentclass[11pt, letterpaper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[
+  top=0.5in, bottom=0.5in,
+  left=0.6in, right=0.6in
+]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[
+  hidelinks,
+  pdftitle={Resume},
+  pdfauthor={Your Name}
+]{hyperref}
+\usepackage{changepage}
+\usepackage{needspace}
+\usepackage{array}
+\usepackage{microtype}
+
+% ── Section Formatting ────────────────────────────────────────────────────────
+\titleformat{\section}
+  {\vspace{-4pt}\scshape\raggedright\large\bfseries}
+  {}{0em}{}
+  [\titlerule \vspace{-5pt}]
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+% Two-column entry: {Company/School}{Date}
+\newcommand{\resumeEntry}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubEntry}[2]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+% Highlighted bullet list
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in, label=\textbullet]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+\newcommand{\resumeItem}[1]{\item\small{#1 \vspace{-2pt}}}
+
+\newcommand{\resumeEntryListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeEntryListEnd}{\end{itemize}}
+
+% ── Document ──────────────────────────────────────────────────────────────────
+\begin{document}
+\raggedright
+
+%% ── Header ──────────────────────────────────────────────────────────────────
+\begin{center}
+  {\Huge \textbf{Your Name}} \\[4pt]
+  \small
+  +91-XXXXXXXXXX $|$
+  \href{mailto:you@email.com}{you@email.com} $|$
+  \href{https://linkedin.com/in/yourprofile}{linkedin.com/in/yourprofile} $|$
+  \href{https://github.com/yourgithub}{github.com/yourgithub}
+\end{center}
+
+%% ── Education ───────────────────────────────────────────────────────────────
+\section{Education}
+\resumeEntryListStart
+  \resumeEntry
+    {University Name}{City, Country}
+    {B.Tech in Computer Science \& Engineering (AI \& Robotics)}{Aug 2022 -- May 2026}
+    \resumeItemListStart
+      \resumeItem{CGPA: X.XX / 10.0}
+      \resumeItem{Relevant Coursework: Machine Learning, Computer Vision, Robotics, DSA, OS}
+    \resumeItemListEnd
+\resumeEntryListEnd
+
+%% ── Experience ──────────────────────────────────────────────────────────────
+\section{Experience}
+\resumeEntryListStart
+  \resumeEntry
+    {Company Name}{City, Country}
+    {Role Title}{Month Year -- Month Year}
+    \resumeItemListStart
+      \resumeItem{Accomplished [X] as measured by [Y], by doing [Z]}
+      \resumeItem{Accomplished [X] as measured by [Y], by doing [Z]}
+    \resumeItemListEnd
+\resumeEntryListEnd
+
+%% ── Projects ────────────────────────────────────────────────────────────────
+\section{Projects}
+\resumeEntryListStart
+  \resumeSubEntry{Project Name}{Month Year}
+  \resumeItemListStart
+    \resumeItem{Accomplished [X] as measured by [Y], by doing [Z]}
+    \resumeItem{Accomplished [X] as measured by [Y], by doing [Z]}
+  \resumeItemListEnd
+\resumeEntryListEnd
+
+%% ── Achievements ────────────────────────────────────────────────────────────
+\section{Achievements \& Awards}
+\resumeItemListStart
+  \resumeItem{Achievement description with quantified impact}
+  \resumeItem{Competition ranking or recognition}
+\resumeItemListEnd
+
+%% ── Technical Skills ────────────────────────────────────────────────────────
+\section{Technical Skills}
+\begin{itemize}[leftmargin=0.15in, label={}]
+  \small{\item{
+    \textbf{Languages}{: Python, C++, Java, JavaScript} \\
+    \textbf{Frameworks}{: PyTorch, TensorFlow, ROS2, FastAPI, React} \\
+    \textbf{Tools}{: Git, Docker, Linux, AWS, GCP} \\
+    \textbf{Concepts}{: Machine Learning, Computer Vision, Deep Learning, NLP}
+  }}
+\end{itemize}
+
+%% ── Certifications ──────────────────────────────────────────────────────────
+\section{Certifications}
+\resumeItemListStart
+  \resumeItem{\textbf{Certification Name} — Issuer (Year)}
+\resumeItemListEnd
+
+\end{document}
